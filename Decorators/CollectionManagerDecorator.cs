@@ -11,7 +11,7 @@ namespace Gelato.Decorators;
 
 public sealed class CollectionManagerDecorator(
     ICollectionManager inner,
-    Lazy<GelatoManager> manager,
+    Lazy<GelatoManager> _manager,
     ILibraryManager libraryManager,
     IProviderManager providerManager,
     IDirectoryService directoryService,

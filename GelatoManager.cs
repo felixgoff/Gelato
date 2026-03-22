@@ -898,6 +898,11 @@ public sealed class GelatoManager(
         );
 
         var stremio = cfg.Stremio;
+        if (stremio is null)
+        {
+            _log.LogWarning("Stremio client is not available for series sync");
+            return;
+        }
 
         var processed = 0;
         foreach (var series in seriesItems)

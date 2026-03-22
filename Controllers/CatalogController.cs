@@ -17,7 +17,7 @@ public class CatalogController(
     CatalogService catalogService,
     CatalogImportService importService,
     ITaskManager taskManager,
-    ILibraryManager libraryManager
+    ILibraryManager _libraryManager
 ) : ControllerBase
 {
     [HttpGet]

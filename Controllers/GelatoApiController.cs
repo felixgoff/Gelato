@@ -40,6 +40,10 @@ public sealed class GelatoApiController : ControllerBase
     )
     {
         var cfg = GelatoPlugin.Instance!.GetConfig(Guid.Empty);
+        if (cfg.Stremio is null)
+        {
+            return StatusCode(503, "Stremio service not available.");
+        }
         var meta = await cfg.Stremio.GetMetaAsync(id, stremioMetaType);
         if (meta is null)
         {
@@ -126,6 +130,11 @@ public sealed class GelatoApiController : ControllerBase
                         : PickHeuristic(manager)
                 );
 
+        if (selected is null)
+        {
+            return BadRequest("No file selected or found.");
+        }
+
         var timerCts = CancellationTokenSource.CreateLinkedTokenSource(ct);
         var timer = new Timer(
             _ =>
@@ -148,6 +157,10 @@ public sealed class GelatoApiController : ControllerBase
         );
 
         _log.LogInformation($"starting torrent stream for {selected.Path}");
+        if (manager.StreamProvider is null)
+        {
+            return StatusCode(503, "Stream provider not available.");
+        }
         var stream = await manager.StreamProvider.CreateStreamAsync(selected, ct);
 
         // Register cleanup for both normal completion and cancellation

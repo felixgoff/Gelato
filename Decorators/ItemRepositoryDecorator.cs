@@ -52,7 +52,7 @@ public sealed class GelatoItemRepository(IItemRepository inner, IHttpContextAcce
         var protected_ids = new HashSet<Guid>();
         foreach (var id in ids) {
             var item = inner.RetrieveItem(id);
-            if (item is not null && GelatoManager.HasStreamTag(item)) {
+            if (item is not null && item.HasStreamTag()) {
                 protected_ids.Add(id);
             }
         }
@@ -72,9 +72,9 @@ public sealed class GelatoItemRepository(IItemRepository inner, IHttpContextAcce
         // through, they'd overwrite the tagged items and break Gelato's tracking.
         var dominated = new HashSet<Guid>();
         foreach (var item in items) {
-            if (GelatoManager.HasStreamTag(item)) continue; // Gelato's own saves pass through
+            if (item.HasStreamTag()) continue; // Gelato's own saves pass through
             var existing = inner.RetrieveItem(item.Id);
-            if (existing is not null && GelatoManager.HasStreamTag(existing)) {
+            if (existing is not null && existing.HasStreamTag()) {
                 dominated.Add(item.Id);
             }
         }
@@ -110,7 +110,7 @@ public sealed class GelatoItemRepository(IItemRepository inner, IHttpContextAcce
         if (filter.IsDeadPerson == true || !string.IsNullOrWhiteSpace(filter.Path))
             return filter;
 
-        var ctx = _http.HttpContext;
+        var ctx = http.HttpContext;
         var isListingIntent =
             ctx is not null && (ctx.IsApiListing() || ctx.IsHomeScreenSectionListing());
         if (!isListingIntent)
