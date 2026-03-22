@@ -9,7 +9,7 @@
     "versions": [
       {
         "changelog": "test",
-        "sourceUrl": "https://github.com/felixgoff/Gelato/releases/download/test/gelato_0.26.7.0.zip"
+        "sourceUrl": "https://github.com/felixgoff/Gelato/releases/download/test/gelato_0.26.7.0.zip",
         "targetAbi": "10.11.6.0",
         "timestamp": "2026-03-22T21:57:55Z",
         "version": "0.26.7.1"
