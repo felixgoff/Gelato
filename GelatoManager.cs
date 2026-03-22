@@ -552,7 +552,6 @@ public sealed class GelatoManager(
             upsertedStreams.Add(streamItem);
         }
 
-        //upsertedStreams = SaveItems(upsertedStreams, (Folder)primary.GetParent()).Cast<Video>().ToList();
         repo.SaveItems(upsertedStreams, ct);
 
         var newIds = new HashSet<Guid>(upsertedStreams.Select(x => x.Id));

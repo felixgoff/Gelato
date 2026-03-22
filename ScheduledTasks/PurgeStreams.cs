@@ -55,26 +55,29 @@ public sealed class PurgeGelatoStreamsTask(
 
         var done = 0;
 
-        foreach (var item in streams)
-        {
-            cancellationToken.ThrowIfCancellationRequested();
+        try {
+            Gelato.Decorators.GelatoItemRepository.SuppressGuard = true;
+            foreach (var item in streams) {
+                cancellationToken.ThrowIfCancellationRequested();
 
-            try
-            {
-                libraryManager.DeleteItem(
-                    item,
-                    new DeleteOptions { DeleteFileLocation = true },
-                    true
-                );
-            }
-            catch (Exception ex)
-            {
-                log.LogWarning(ex, "Failed to delete item {ItemId}", item.Id);
-            }
+                try {
+                    libraryManager.DeleteItem(
+                        item,
+                        new DeleteOptions { DeleteFileLocation = true },
+                        true
+                    );
+                }
+                catch (Exception ex) {
+                    log.LogWarning(ex, "Failed to delete item {ItemId}", item.Id);
+                }
 
-            done++;
-            var pct = Math.Min(100.0, ((double)done / total) * 100.0);
-            progress?.Report(pct);
+                done++;
+                var pct = Math.Min(100.0, ((double)done / total) * 100.0);
+                progress?.Report(pct);
+            }
+        }
+        finally {
+            Gelato.Decorators.GelatoItemRepository.SuppressGuard = false;
         }
 
         progress?.Report(100.0);
